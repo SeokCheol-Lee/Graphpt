@@ -5,27 +5,47 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        var dlist: ArrayList<Int>
+        dlist = arrayListOf<Int>(123,12,3124,124,213,123,124,12,31,24,12,3)
+        var dlist2: ArrayList<Int>
+        dlist2 = arrayListOf<Int>(123,123,334,14,2233,3,224,1332,3231,424,1222,43)
+        var dlist3: ArrayList<Int>
+        dlist3 = arrayListOf<Int>(12,13,34,14,22,3,22,31,44,12,43)
         var barChart: BarChart = findViewById(R.id.chart_week)
-        setChartView(barChart)
-
+        setChartView(barChart,dlist)
+        var barChart2: LineChart = findViewById(R.id.chart_week2)
+        LinchartGh(barChart2,dlist2)
+        var barChart3: LineChart = findViewById(R.id.chart_week3)
+        LinchartGh(barChart3,dlist3)
     }
-    private fun setChartView(view: View) {
-        var chartWeek = view.findViewById<BarChart>(R.id.chart_week)
-        setWeek(chartWeek)
+    private fun LinchartGh(lineChart: LineChart, list: ArrayList<Int>){
+        val entries = ArrayList<Entry>()
+        for(i in 0 until list.size){
+            entries.add(Entry(i.toFloat(),list[i].toFloat()))
+        }
+        val dataset = LineDataSet(entries,"")
+        lineChart.getTransformer(YAxis.AxisDependency.LEFT)
+        lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        val data = LineData(dataset)
+
+        lineChart.data = data
+        lineChart.invalidate()
+    }
+    private fun setChartView(barChart: BarChart, list: ArrayList<Int>) {
+        setWeek(barChart,list)
     }
 
     private fun initBarDataSet(barDataSet: BarDataSet) {
@@ -39,43 +59,14 @@ class MainActivity : AppCompatActivity() {
         barDataSet.valueTextSize = 12f
     }
 
-    private fun setWeek(barChart: BarChart) {
+    private fun setWeek(barChart: BarChart, list: ArrayList<Int>) {
         initBarChart(barChart)
 
         barChart.setScaleEnabled(false) //Zoom In/Out
 
-        val valueList = ArrayList<Int>()
+        val valueList = list
         val entries: ArrayList<BarEntry> = ArrayList()
         val title = "걸음 수"
-
-        //input data
-        /*
-        for (i in 0..5) {
-            valueList.add(i * 100.1)
-        }
-         */
-        valueList.add(100)
-        valueList.add(900)
-        valueList.add(200)
-        valueList.add(700)
-        valueList.add(100)
-        valueList.add(300)
-        valueList.add(400)
-        valueList.add(100)
-        valueList.add(900)
-        valueList.add(200)
-        valueList.add(700)
-        valueList.add(100)
-        valueList.add(300)
-        valueList.add(400)
-        valueList.add(100)
-        valueList.add(900)
-        valueList.add(200)
-        valueList.add(700)
-        valueList.add(100)
-        valueList.add(300)
-        valueList.add(400)
-
 
         //fit the data into a bar
         for (i in 0 until valueList.size) {
